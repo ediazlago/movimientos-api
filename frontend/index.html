@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movimientos Bancarios</title>
+</head>
+<body>
+  <h1>Subir Excel</h1>
+  <form id="uploadForm">
+    <input type="file" id="excelFile" />
+    <button type="submit">Subir</button>
+  </form>
+
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const file = document.getElementById("excelFile").files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://localhost:8000/cargar_movimientos/", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      alert(data.mensaje || "Subido");
+    });
+  </script>
+</body>
+</html>
