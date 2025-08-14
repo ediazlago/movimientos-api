@@ -29,7 +29,13 @@ Una API web desarrollada con **FastAPI** para cargar, clasificar y gestionar mov
 ---
 
 ## 📁 Estructura del proyecto
-movimientos_api/ ├── app/ # Lógica principal de la aplicación │ ├── models/ # Definición de modelos de datos │ ├── routes/ # Rutas de la API │ ├── controllers/ # Controladores que gestionan la lógica │ └── utils/ # Funciones auxiliares ├── tests/ # Pruebas unitarias y de integración ├── venv/ # Entorno virtual de Python ├── requirements.txt # Dependencias del proyecto ├── README.md # Documentación del proyecto └── main.py # Punto de entrada de la aplicación
+movimientos_api/
+├── LICENSE                # Licencia del proyecto
+├── README.md              # Documentación principal
+├── requirements.txt       # Dependencias de Python
+├── app/                   # Backend de la aplicación
+├── env/                   # Entorno virtual (puede ignorarse en producción)
+└── frontend/              # Interfaz de usuario o cliente web
 
 ---
 
