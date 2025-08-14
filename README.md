@@ -29,21 +29,7 @@ Una API web desarrollada con **FastAPI** para cargar, clasificar y gestionar mov
 ---
 
 ## 📁 Estructura del proyecto
-movimientos_api/ 
-├── app/ 
-│ ├── main.py 
-│ ├── database.py 
-│ ├── models.py 
-│ ├── auth.py 
-│ ├── routers/ 
-│ │ ├── auth.py 
-│ │ ├── movimientos.py 
-├── frontend/ 
-│ └── index.html 
-├── create_tables.py 
-├── requirements.txt 
-├── .env 
-└── README.md
+movimientos_api/ ├── app/ # Lógica principal de la aplicación │ ├── models/ # Definición de modelos de datos │ ├── routes/ # Rutas de la API │ ├── controllers/ # Controladores que gestionan la lógica │ └── utils/ # Funciones auxiliares ├── tests/ # Pruebas unitarias y de integración ├── venv/ # Entorno virtual de Python ├── requirements.txt # Dependencias del proyecto ├── README.md # Documentación del proyecto └── main.py # Punto de entrada de la aplicación
 
 ---
 
@@ -54,26 +40,33 @@ movimientos_api/
    git clone https://github.com/tuusuario/movimientos_api.git
    cd movimientos_api
 
-
 ---
 
 2. Crea un entorno virtual:
-
+    '''bash
     python -m venv venv
     source venv/bin/activate
 
-3. Instala las dependencias:
+---
 
+3. Instala las dependencias:
+    ```bash
     pip install -r requirements.txt
 
-4. Configura el archivo .env:
+---
 
+4. Configura el archivo .env:
+    ```bash
     DATABASE_URL=mysql+pymysql://usuario:contraseña@host:puerto/basedatos
     SECRET_KEY=tu_clave_secreta
 
-5. Configura el archivo .env:
+---
 
+5. Configura el archivo .env:
+    ```bash
     uvicorn app.main:app --reload
+
+---
 
 📌 Endpoints principales
 Método	Ruta	Descripción
@@ -87,12 +80,8 @@ GET	/	Mensaje de bienvenida
 - Autenticación con JWT
 - Variables sensibles gestionadas con .env
 
-📄 Licencia
+## 📄 Licencia
 Este proyecto está bajo la licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente.
 
-✉️ Contacto
+## ✉️ Contacto
 Desarrollado por Esteban. ¿Tienes sugerencias o quieres colaborar? ¡Estoy abierto a mejoras!
-
----
-
-¿Quieres que lo genere como archivo para copiar directamente en tu proyecto? También puedo ayudarte a personalizarlo si tienes un nombre de repositorio o quieres incluir capturas o enlaces.
