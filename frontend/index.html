@@ -1,30 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8" />
   <title>Movimientos Bancarios</title>
+  <style>
+    body { font-family: Arial; margin: 2em; }
+    input, button { margin: 0.5em; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: left; }
+  </style>
 </head>
 <body>
-  <h1>Subir Excel</h1>
-  <form id="uploadForm">
-    <input type="file" id="excelFile" />
-    <button type="submit">Subir</button>
+  <h1>Gestión de Movimientos</h1>
+
+  <form id="movimientoForm">
+    <label>Tipo:</label>
+    <input type="text" id="tipo" required />
+    <label>Cantidad:</label>
+    <input type="number" id="cantidad" required />
+    <label>Fecha:</label>
+    <input type="datetime-local" id="fecha" required />
+    <button type="submit">Agregar Movimiento</button>
   </form>
 
-  <script>
-    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const file = document.getElementById("excelFile").files[0];
-      const formData = new FormData();
-      formData.append("file", file);
+  <h2>Listado de Movimientos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody id="tablaMovimientos"></tbody>
+  </table>
 
-      const res = await fetch("http://localhost:8000/cargar_movimientos/", {
+  <script>
+    const API_URL = "http://localhost:8000/api/movimientos";
+
+    async function cargarMovimientos() {
+      const res = await fetch(API_URL);
+      const movimientos = await res.json();
+      const tabla = document.getElementById("tablaMovimientos");
+      tabla.innerHTML = "";
+      movimientos.forEach(m => {
+        const fila = `<tr>
+          <td>${m.id}</td>
+          <td>${m.tipo}</td>
+          <td>${m.cantidad}</td>
+          <td>${new Date(m.fecha).toLocaleString()}</td>
+        </tr>`;
+        tabla.innerHTML += fila;
+      });
+    }
+
+    document.getElementById("movimientoForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const tipo = document.getElementById("tipo").value;
+      const cantidad = parseFloat(document.getElementById("cantidad").value);
+      const fecha = document.getElementById("fecha").value;
+
+      await fetch(API_URL, {
         method: "POST",
-        body: formData
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tipo, cantidad, fecha })
       });
 
-      const data = await res.json();
-      alert(data.mensaje || "Subido");
+      e.target.reset();
+      cargarMovimientos();
     });
+
+    cargarMovimientos();
   </script>
 </body>
 </html>
