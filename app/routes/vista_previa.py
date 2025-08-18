@@ -19,7 +19,7 @@ def formulario_subida():
         <body>
             <h2>Sube tu archivo Excel</h2>
             <form action="vista-previa" enctype="multipart/form-data" method="post">
-                <input name="file" type="file" accept=".xls",".xlsx"/>
+                <input name="file" type="file" accept=".xls,.xlsx"/>
                 <input type="submit" value="Ver vista previa"/>
             </form>
         </body>
@@ -52,9 +52,8 @@ async def vista_previa(file: UploadFile = File(...)):
 
     df_cache["preview"] = df
 
-    import html
-    datos_json_str = html.escape(json.dumps(df.to_dict(orient="records"), ensure_ascii=False))
-    columnas_json_str = html.escape(json.dumps(COLUMNAS_ESPERADAS, ensure_ascii=False))
+    datos_json_str = json.dumps(df.to_dict(orient="records"), ensure_ascii=False).replace("\\", "\\\\").replace('"', '\\"')
+    columnas_json_str = json.dumps(COLUMNAS_ESPERADAS, ensure_ascii=False).replace("\\", "\\\\").replace('"', '\\"')
 
     html_content = f"""
     <!DOCTYPE html>
@@ -161,7 +160,6 @@ async def confirmar_insercion(request: Request):
     df_editado = pd.DataFrame(nuevos_datos)
     df_editado = df_editado.applymap(lambda x: str(x).strip() if pd.notnull(x) else x)
 
-    # Verificar columnas duplicadas
     duplicadas = df_editado.columns[df_editado.columns.duplicated()].tolist()
     if duplicadas:
         return HTMLResponse(
@@ -169,10 +167,9 @@ async def confirmar_insercion(request: Request):
             status_code=400
         )
 
-    # Normalizar columnas y convertir fechas
     df_editado = df_editado.rename(columns={"fecha valor": "fecha_valor"})
     df_editado = df_editado.rename(columns={"fecha": "fecha_operacion"})
-    for col in ["fecha", "fecha_valor"]:
+    for col in ["fecha_operacion", "fecha_valor"]:
         if col in df_editado.columns:
             df_editado[col] = pd.to_datetime(df_editado[col], format="%d/%m/%Y", errors="coerce")
 
@@ -180,7 +177,6 @@ async def confirmar_insercion(request: Request):
         if col not in df_editado.columns:
             df_editado[col] = None
 
-    # Validación con Pydantic
     try:
         errores = []
         datos_validados = []

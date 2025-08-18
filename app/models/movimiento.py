@@ -3,7 +3,7 @@ from pydantic import BaseModel, validator
 from datetime import datetime
 
 class Movimiento(BaseModel):
-    fecha: datetime
+    fecha_operacion: datetime
     concepto: str
     fecha_valor: datetime
     importe: float
