@@ -1,11 +1,16 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime
-from app.database import Base
+# app/models/movimiento.py
+from pydantic import BaseModel, validator
 from datetime import datetime
 
-class Movimiento(Base):
-    __tablename__ = "movimientos"
+class Movimiento(BaseModel):
+    fecha: datetime
+    concepto: str
+    fecha_valor: datetime
+    importe: float
+    saldo: float
 
-    id = Column(Integer, primary_key=True, index=True)
-    tipo = Column(String(50), nullable=False)
-    cantidad = Column(Float, nullable=False)
-    fecha = Column(DateTime, default=datetime.utcnow)
+    @validator("concepto")
+    def concepto_no_vacio(cls, v):
+        if not v.strip():
+            raise ValueError("El concepto no puede estar vacío")
+        return v
